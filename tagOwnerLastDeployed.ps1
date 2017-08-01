@@ -8,6 +8,10 @@ If true, changes will not be applied to Azure. The default is false.
 
 #>
 
+param (
+    [switch]$dryRun = $false
+)
+
 $allRGs = (Get-AzureRmResourceGroup).ResourceGroupName
 Write-Warning "Found $($allRGs | Measure-Object| Select-Object -ExpandProperty Count) total RGs"
 
@@ -42,6 +46,10 @@ foreach ($rg in $notAliasedRGs)
         if (-not $dryRun) 
         {
             Set-AzureRmResourceGroup -Name $rg -Tag $tags
+        }
+        else
+        {
+            Write-Warning "Set-AzureRmResourceGroup -Name $rg -Tag $tags"
         }
     } 
     else 
